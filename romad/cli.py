@@ -15,6 +15,7 @@ def main():
 Commands:
   dns          Run DNS leak detection test
   vpn          Run VPN health check
+  speed        Internet speed test
   status       Quick overview (dns + vpn combined)
   watch        Continuous VPN/DNS monitoring
   audit        Full security posture check
@@ -23,6 +24,9 @@ Commands:
 Examples:
   romad dns                  Check for DNS leaks
   romad vpn --expect US      Verify VPN exit is in US
+  romad speed                Run internet speed test
+  romad speed --quick        Fast speed test (smaller payloads)
+  romad speed --json         JSON output
   romad status               Full status check
   romad watch                Monitor VPN/DNS continuously
   romad watch -i 30          Check every 30 seconds
@@ -43,6 +47,12 @@ Examples:
     dns_parser = subparsers.add_parser("dns", help="DNS leak detection")
     dns_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     dns_parser.add_argument("--json", action="store_true", help="JSON output")
+
+    # speed subcommand
+    speed_parser = subparsers.add_parser("speed", help="Internet speed test")
+    speed_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    speed_parser.add_argument("--json", action="store_true", help="JSON output")
+    speed_parser.add_argument("--quick", action="store_true", help="Quick test (smaller payloads)")
 
     # vpn subcommand
     vpn_parser = subparsers.add_parser("vpn", help="VPN health check")
@@ -99,7 +109,11 @@ Examples:
         parser.print_help()
         sys.exit(0)
 
-    if args.command == "dns":
+    if args.command == "speed":
+        from .speed import run
+        sys.exit(run(verbose=args.verbose, json_output=args.json, quick=args.quick))
+
+    elif args.command == "dns":
         from .dns import run
         sys.exit(run(verbose=args.verbose, json_output=args.json))
 

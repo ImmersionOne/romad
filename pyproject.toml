@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "romad"
-version = "0.3.0"
+version = "0.4.0"
 description = "Travel networking toolkit for digital nomads"
 readme = "README.md"
 license = {text = "MIT"}
@@ -30,5 +30,5 @@ classifiers = [
 romad = "romad.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/djroma/romad"
-Repository = "https://github.com/djroma/romad"
+Homepage = "https://github.com/ImmersionOne/romad"
+Repository = "https://github.com/ImmersionOne/romad"
