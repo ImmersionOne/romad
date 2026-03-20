@@ -4,7 +4,7 @@ class Romad < Formula
   desc "Travel networking toolkit for digital nomads"
   homepage "https://github.com/ImmersionOne/romad"
   url "https://github.com/ImmersionOne/romad/archive/refs/tags/v0.9.0.tar.gz"
-  sha256 "cedf517847443b85bf91fbe0158fb0b5078e79b4fc7c048fa99964e86894528d"
+  sha256 "c60cda992df775c062016eccbf012b5125df5758badf3f3cbad19905afa98bcb"
   license "MIT"
 
   depends_on "python@3.12"
