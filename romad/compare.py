@@ -115,7 +115,8 @@ def show(json_output=False):
             print(json_mod.dumps({"locations": []}, indent=2))
         else:
             print(colored("\n  No saved locations yet.", C.YELLOW))
-            print(f"  Save one with: {colored('romad compare save \"Coffee Shop Name\"', C.CYAN)}")
+            hint = colored('romad compare save "Coffee Shop Name"', C.CYAN)
+            print(f"  Save one with: {hint}")
             print()
         return 0
 
