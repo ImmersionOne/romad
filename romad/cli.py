@@ -16,6 +16,11 @@ Commands:
   dns          Run DNS leak detection test
   vpn          Run VPN health check
   speed        Internet speed test
+  portal       Captive portal detection
+  locate       Location consistency check
+  leak         Full privacy leak check (DNS + IPv6 + WebRTC)
+  score        Nomad readiness score
+  compare      Save & compare locations over time
   status       Quick overview (dns + vpn combined)
   watch        Continuous VPN/DNS monitoring
   audit        Full security posture check
@@ -27,6 +32,12 @@ Examples:
   romad speed                Run internet speed test
   romad speed --quick        Fast speed test (smaller payloads)
   romad speed --json         JSON output
+  romad portal               Detect captive portals
+  romad locate               Check location consistency
+  romad leak                 Full privacy leak check
+  romad score                Get your nomad readiness score
+  romad compare              Compare saved locations
+  romad compare save "Cafe"  Save current location
   romad status               Full status check
   romad watch                Monitor VPN/DNS continuously
   romad watch -i 30          Check every 30 seconds
@@ -53,6 +64,37 @@ Examples:
     speed_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     speed_parser.add_argument("--json", action="store_true", help="JSON output")
     speed_parser.add_argument("--quick", action="store_true", help="Quick test (smaller payloads)")
+
+    # portal subcommand
+    portal_parser = subparsers.add_parser("portal", help="Captive portal detection")
+    portal_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    portal_parser.add_argument("--json", action="store_true", help="JSON output")
+    portal_parser.add_argument("--no-open", action="store_true", help="Don't auto-open portal in browser")
+
+    # locate subcommand
+    locate_parser = subparsers.add_parser("locate", help="Location consistency check")
+    locate_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    locate_parser.add_argument("--json", action="store_true", help="JSON output")
+
+    # leak subcommand
+    leak_parser = subparsers.add_parser("leak", help="Full privacy leak check")
+    leak_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    leak_parser.add_argument("--json", action="store_true", help="JSON output")
+
+    # score subcommand
+    score_parser = subparsers.add_parser("score", help="Nomad readiness score")
+    score_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    score_parser.add_argument("--json", action="store_true", help="JSON output")
+
+    # compare subcommand
+    compare_parser = subparsers.add_parser("compare", help="Save & compare locations")
+    compare_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    compare_parser.add_argument("--json", action="store_true", help="JSON output")
+    compare_sub = compare_parser.add_subparsers(dest="compare_command", help="Compare command")
+    compare_save = compare_sub.add_parser("save", help="Save current location")
+    compare_save.add_argument("name", help="Location name (e.g. 'WeWork SoHo')")
+    compare_sub.add_parser("show", help="Show comparison (default)")
+    compare_sub.add_parser("clear", help="Clear all saved locations")
 
     # vpn subcommand
     vpn_parser = subparsers.add_parser("vpn", help="VPN health check")
@@ -106,7 +148,29 @@ Examples:
         parser.print_help()
         sys.exit(0)
 
-    if args.command == "speed":
+    if args.command == "portal":
+        from .portal import run
+        sys.exit(run(verbose=args.verbose, json_output=args.json, auto_open=not args.no_open))
+
+    elif args.command == "locate":
+        from .locate import run
+        sys.exit(run(verbose=args.verbose, json_output=args.json))
+
+    elif args.command == "leak":
+        from .leak import run
+        sys.exit(run(verbose=args.verbose, json_output=args.json))
+
+    elif args.command == "score":
+        from .score import run
+        sys.exit(run(verbose=args.verbose, json_output=args.json))
+
+    elif args.command == "compare":
+        from .compare import run
+        action = args.compare_command or "show"
+        name = getattr(args, "name", None)
+        sys.exit(run(action=action, name=name, verbose=args.verbose, json_output=args.json))
+
+    elif args.command == "speed":
         from .speed import run
         sys.exit(run(verbose=args.verbose, json_output=args.json, quick=args.quick))
 
