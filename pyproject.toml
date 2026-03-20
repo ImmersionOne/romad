@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "romad"
-version = "0.4.0"
+version = "0.6.0"
 description = "Travel networking toolkit for digital nomads"
 readme = "README.md"
 license = {text = "MIT"}
