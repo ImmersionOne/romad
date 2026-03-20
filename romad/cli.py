@@ -98,9 +98,6 @@ Examples:
     add_parser = sync_sub.add_parser("add", help="Add a file to sync")
     add_parser.add_argument("file", help="File path to add")
 
-    push_parser_msg = sync_sub.add_parser("push", help="Push notes")
-    # Note: push already added above, message handled via args
-
     args = parser.parse_args()
 
     if not args.command:
